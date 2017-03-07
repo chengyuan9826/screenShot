@@ -35,7 +35,7 @@ function addEventHandler(oTarget, sEventType, fnHandler) {
     } else {
         oTarget["on" + sEventType] = fnHandler;
     }
-};
+}
 
 function removeEventHandler(oTarget, sEventType, fnHandler) {
     if (oTarget.removeEventListener) {

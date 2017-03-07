@@ -4,7 +4,7 @@
     <title></title>
     <style type="text/css">
         #ViewDiv{width: 200px; height: 200px;}
-        #bgDiv {height: 600px;position: relative;}
+        #bgDiv {height: 400px;width:600px;position: relative;}
         #dragDiv {
             width: 100px;
             height: 80px;
@@ -90,38 +90,23 @@
 <body>
 <div id="bgDiv">
     <div id="dragDiv">
-        <div id="dRightDown">
-        </div>
-        <div id="dLeftDown">
-        </div>
-        <div id="dRightUp">
-        </div>
-        <div id="dLeftUp">
-        </div>
-        <div id="dRight">
-        </div>
-        <div id="dLeft">
-        </div>
-        <div id="dDown">
-        </div>
-        <div id="dUp">
-        </div>
+        <div id="dRightDown"></div>
+        <div id="dLeftDown"></div>
+        <div id="dRightUp"></div>
+        <div id="dLeftUp"></div>
+        <div id="dRight"></div>
+        <div id="dLeft"></div>
+        <div id="dDown"></div>
+        <div id="dUp"></div>
     </div>
 </div>
-<div id="ViewDiv">
-</div>
-<br />
-<br />
-<input type="button" value="生成图片" /><br />
-<br />
+<div id="ViewDiv"></div>
+<input type="button" value="生成图片" onclick="create();" />
 <img id="ShowImg" alt="" src="" style="display: none;" />
-
-<script src="js/prototype.js"></script>
-<script src="js/ImgCropper.js" ></script>
-<script src="js/Resize.js"></script>
-<script src="js/drag.js" ></script>
-
-
+<script type="text/javascript" src="js/prototype.js"></script>
+<script type="text/javascript" src="js/ImgCropper.js" ></script>
+<script type="text/javascript" src="js/Resize.js"></script>
+<script type="text/javascript" src="js/drag.js" ></script>
 <script language="javascript" type="text/javascript">
     var isIE = (document.all) ? true : false; // 是否ie
     var isIE6 = isIE && ([/MSIE (\d)\.0/i.exec(navigator.userAgent)][0][1] == 6);
@@ -129,8 +114,8 @@
 //返回id对象
         return "string" == typeof id ? document.getElementById(id) : id;
     };
-    var imgCropper = new ImgCropper("bgDiv", "dragDiv", "../../2016/highScoreComposition/mov/zw1-1.mp4", {
-        Width: 1920,
+    var imgCropper = new ImgCropper("bgDiv", "dragDiv", "image/Hydrangeas.jpg", {
+        Width: 500,
         Height: 600,
         Color: "#FFF",
         Resize: true,
@@ -143,9 +128,23 @@
         RightUp: "dRightUp",
         LeftUp: "dLeftUp",
         Preview: "ViewDiv",
-viewWidth: 400, //这里要是不写的话预览截图就等同大
-viewHeight:200
+        viewWidth: 300, //这里要是不写的话预览截图就等同大
+        viewHeight: 200
     });
+
+    function create() {
+        var path = imgCropper.Url;
+        var o = imgCropper.GetPos();
+        x = o.Left;
+        y = o.Top;
+        w = o.Width;
+        h = o.Height;
+        pw = imgCropper._layBase.width;
+        ph = imgCropper._layBase.height;
+        alert(x);
+        $("ShowImg").onload = function() { this.style.display = ""; }
+    }
+
 </script>
 </body>
 </html>

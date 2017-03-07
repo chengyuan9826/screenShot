@@ -1,9 +1,17 @@
 //缩放程序
+var isIE = (document.all) ? true : false; // 是否ie
+var isIE6 = isIE && ([/MSIE (\d)\.0/i.exec(navigator.userAgent)][0][1] == 6);
+var $ = function (id) {
+//返回id对象
+    return "string" == typeof id ? document.getElementById(id) : id;
+};
 var Resize = Class.create();
+
+/*function Resize(){}*/
 Resize.prototype = {
 //缩放对象
     initialize: function(obj, options) {
-        this._obj = $(obj); //缩放对象
+        this._obj = obj; //缩放对象
         this._styleWidth = this._styleHeight = this._styleLeft = this._styleTop = 0; //样式参数
         this._sideRight = this._sideDown = this._sideLeft = this._sideUp = 0; //坐标参数
         this._fixLeft = this._fixTop = 0; //定位参数
@@ -169,9 +177,7 @@ Resize.prototype = {
         };
 
 //设置触发对象
-
         addEventHandler(resize, "mousedown", BindAsEventListener(this, this.Start, fun));
-
     },
 
 //准备缩放

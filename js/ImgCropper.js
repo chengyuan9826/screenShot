@@ -10,8 +10,8 @@ ImgCropper.prototype = {
         this._layHandle = $(handle); //控制层
         this.Url = url; //图片地址
 
-        this._layBase = this._Container.appendChild(document.createElement("video")); //底层
-        this._layCropper = this._Container.appendChild(document.createElement("video")); //切割层
+        this._layBase = this._Container.appendChild(document.createElement("img")); //底层
+        this._layCropper = this._Container.appendChild(document.createElement("img")); //切割层
         this._layCropper.onload = Bind(this, this.SetPos);
 //用来设置大小
         this._tempImg = document.createElement("img");

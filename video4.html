@@ -3,29 +3,117 @@
 <head>
     <title></title>
     <style>
-        *{margin: 0}
-        html{height:100%;width:100%;}
-        body{position: relative;height:100%;width:100%;}
-        video {
-            position: absolute;margin: 0; height:100%;
-            width: 100%;
-            max-height: 100%; max-width: 100%;
-            object-fit: cover;
-            z-index:1;
+        * {
+            margin: 0
         }
-        #cutBox{position: absolute;top:0;left:0;width:100%;height:100%;z-index: 12;}
-        #cutBox{display: block;border:5px solid #428bca;box-sizing:border-box;background: rgba(0,0,0,0.8);cursor:crosshair;}
-        #sizeBox{position: fixed;width:0;border:1px solid #fff;z-index: 13;}
-        #btnList{position:absolute;right:0;bottom:-36px;margin:0;}
-        #btnList button{float:right;width:60px;height:30px;margin:0 4px;color:#fff;background: #428bca;border:1px solid #eee;border-radius: 6px;}
-        #cancel{background: #333;right:68px;}
-        #screenShot{position: absolute;z-index: 2;top:0;left:0;}
-        #img{position:absolute;z-index: 2;bottom:0;right:0;}
-        canvas.active{cursor: url(../2017/qizhongkaoshi-zujuan/images/tab-1-active.png) }
-        #can{position: absolute;}
 
-        #dragDiv
-        {    position: absolute;
+        html {
+            height: 100%;
+            width: 100%;
+        }
+
+        body {
+            position: relative;
+            height: 100%;
+            width: 100%;
+        }
+
+        video {
+            position: absolute;
+            margin: 0;
+            height: 100%;
+            width: 100%;
+            max-height: 100%;
+            max-width: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        #cutBox {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 12;
+        }
+
+        #cutBox {
+            display: block;
+            border: 5px solid #428bca;
+            box-sizing: border-box;
+            background: rgba(0, 0, 0, 0.8);
+            cursor: crosshair;
+        }
+
+        #sizeBox {
+            position: fixed;
+            width: 0;
+            border: 1px solid #fff;
+            z-index: 13;
+        }
+
+        #btnList {
+            position: absolute;
+            right: 0;
+            bottom: -36px;
+            margin: 0;
+        }
+
+        #btnList button {
+            float: right;
+            width: 60px;
+            height: 30px;
+            margin: 0 4px;
+            color: #fff;
+            background: #428bca;
+            border: 1px solid #eee;
+            border-radius: 6px;
+        }
+
+        #cancel {
+            background: #333;
+            right: 68px;
+        }
+
+        #screenShot {
+            position: absolute;
+            z-index: 2;
+            top: 0;
+            left: 0;
+        }
+
+        #img {
+            position: absolute;
+            z-index: 2;
+            bottom: 0;
+            right: 0;
+        }
+
+        canvas.active {
+            cursor: url(../2017/qizhongkaoshi-zujuan/images/tab-1-active.png)
+        }
+
+        #can {
+            position: absolute;
+        }
+
+        #ViewDiv {
+            width: 200px;
+            height: 200px;
+        }
+
+        #bgDiv {width:1000px;
+            position: relative;
+        }
+        #bgDiv img.active{opacity: 0.7}
+        #bgDiv img {
+            width: 100%;
+        }
+
+        #dragDiv {
+            position: absolute;
+            display: none;
             z-index: 200;
             width: 100px;
             height: 80px;
@@ -34,8 +122,8 @@
             border: solid 1px #fff;
             cursor: move;
         }
-        #dRightDown, #dLeftDown, #dLeftUp, #dRightUp, #dRight, #dLeft, #dUp, #dDown
-        {
+
+        #dRightDown, #dLeftDown, #dLeftUp, #dRightUp, #dRight, #dLeft, #dUp, #dDown {
             position: absolute;
             background: #FFF;
             border: 1px solid #333;
@@ -46,63 +134,63 @@
             opacity: 0.5;
             filter: alpha(opacity=50);
         }
-        #dLeftDown, #dRightUp
-        {
+
+        #dLeftDown, #dRightUp {
             cursor: ne-resize;
         }
-        #dRightDown, #dLeftUp
-        {
+
+        #dRightDown, #dLeftUp {
             cursor: nw-resize;
         }
-        #dRight, #dLeft
-        {
+
+        #dRight, #dLeft {
             cursor: e-resize;
         }
-        #dUp, #dDown
-        {
+
+        #dUp, #dDown {
             cursor: n-resize;
         }
-        #dLeftDown
-        {
+
+        #dLeftDown {
             left: 0px;
             bottom: 0px;
         }
-        #dRightUp
-        {
+
+        #dRightUp {
             right: 0px;
             top: 0px;
         }
-        #dRightDown
-        {
+
+        #dRightDown {
             right: 0px;
             bottom: 0px;
             background-color: #00F;
         }
-        #dLeftUp
-        {
+
+        #dLeftUp {
             left: 0px;
             top: 0px;
         }
-        #dRight
-        {
+
+        #dRight {
             right: 0px;
             top: 50%;
             margin-top: -4px;
         }
-        #dLeft
-        {
+
+        #dLeft {
             left: 0px;
             top: 50%;
             margin-top: -4px;
         }
-        #dUp
-        {
+
+        #dUp {
             top: 0px;
             left: 50%;
             margin-left: -4px;
         }
-        #dDown
-        {
+
+        #dDown {
             bottom: 0px;
             left: 50%;
             margin-left: -4px;
@@ -110,230 +198,60 @@
     </style>
 </head>
 <body>
-<button id="screenShot" class="btn btn-primary">截图</button>
-<!--<video id="localVideo" src="7-J7K-FXNLiPhUNoQC8Kew__.mp4" autoplay>视频走丢了。。</video>-->
-<video id="localVideo" src="../../2016/highScoreComposition/mov/zw1-1.mp4" muted = true autoplay>视频走丢了。。</video>
-<div id="dragDiv">
-    <div id="dRightDown">
+<div id="bgDiv">
+    <div id="dragDiv">
+        <div id="dRightDown"></div>
+        <div id="dLeftDown"></div>
+        <div id="dRightUp"></div>
+        <div id="dLeftUp"></div>
+        <div id="dRight"></div>
+        <div id="dLeft"></div>
+        <div id="dDown"></div>
+        <div id="dUp"></div>
+        <canvas id="canvas"></canvas>
     </div>
-    <div id="dLeftDown">
-    </div>
-    <div id="dRightUp">
-    </div>
-    <div id="dLeftUp">
-    </div>
-    <div id="dRight">
-    </div>
-    <div id="dLeft">
-    </div>
-    <div id="dDown">
-    </div>
-    <div id="dUp">
-    </div>
+    <img src="image/HYdrangeas.jpg" id="pic" alt="">
+    <button id="sure">提交</button>
+    <img src="" id="newPic" alt="">
 </div>
 <script src="js/jquery-1.8.3.min.js"></script>
 <script src="js/prototype.js"></script>
 <script src="js/Resize.js"></script>
+<script src="js/drag.js"></script>
+<script src="js/cut.js"></script>
 <script>
-    function Screen(obj){
-        var that=this;
-        this.sendPic=obj.sendPic;
-        this.video=obj.video;
-        this.baseURL=null;
-        this.cutBox=this.createEle(document.body,'div','cutBox');
-        this.sizeBox=this.createEle(this.cutBox,'div','sizeBox');
-        this.canvas=this.createEle(this.sizeBox,'canvas','screenCanvas');
-        this.context=this.canvas.getContext('2d');
-        this.btnList=this.createEle(this.sizeBox,'div','btnList');
-        this.sure=this.createEle(this.btnList,'button','screenSure');
-        this.sure.innerHTML='确定';
-        this.cancel=this.createEle(this.btnList,'button','screenCancel');
-        this.cancel.innerHTML='取消';
-        this.rect=this.createEle(this.btnList,'button','screenRect');
-        this.rect.innerHTML='标记';
-        this.save=this.createEle(this.btnList,'button','screenSave');
-        this.save.innerHTML='保存';
-        that.scaleY=obj.scaley||1;
-        that.scaleX=obj.scalex||1;
-       /* this.setSize();*/
-
-    }
-    Screen.prototype.setSize=function(){
-        var that=this;
-        var pic=$(that.cutBox);
-        var sx,sy,mx,my;
-        var sizeBox=$(that.sizeBox);
-        var off=false;
-        that.cutBox.onmousedown=function (event) {
-            off=true;
- /*           if(sx<0){sx=0;}
-            else if(sx>=pic.offsetWidth)
-            {sx=pic.offsetWidth;}
-            else{sx=event.clientX;}
-            if(sy<0){sy=0;}
-            else if(sy>=pic.offsetHeight)
-            {sy=pic.offsetHeight;}
-            else{
-                sy=event.clientY;}*/
-            sx=event.clientX;
-            sy=event.clientY;
-        };
-        that.cutBox.onmousemove=function (event) {
-            var cx= 0,cy= 0,wh= 0,ht=0;
-            if(off){
-                mx=event.clientX;
-                my=event.clientY;
-                mx=mx>0?mx:0;
-                mx=mx>pic.width()?pic.width():mx;
-                my=my>0?my:0;
-                my=my>pic.width()?pic.width():my;
-                if(sx>mx&&sy>my){
-                    sizeBox.css({right:(pic.width()-sx)+'px',bottom:(pic.height()-sy)+'px'});
-                    cx=mx;cy=my;
-                }
-                else if(sx>mx&&sy<my){
-                    sizeBox.css({right:(pic.width()-sx)+'px',top:sy+'px'});
-                    cx=mx;cy=sy;
-                }
-                else if(sx<mx&&sy<my){
-                    sizeBox.css({left:sx+'px',top:sy+'px'});
-                    cx=sx;cy=sy;
-                }
-                else if(sx<mx&&sy>my){
-                    sizeBox.css({left:sx+'px',bottom:(pic.height()-sy)+'px'});
-                    cx=sx;cy=my;
-                }
-                wh=Math.abs(mx-sx);
-                ht=Math.abs(my-sy);
-                if(ht>pic.height()-50){
-                    $(that.btnList).css('bottom',0);
-                }
-                sizeBox.width(wh);
-                sizeBox.height(ht);
-                that.cut(cx, cy, wh,ht);
-            }
-        };
-        that.cutBox.onmouseup=function () {
-            off=false;
-            that.savePic();
-            that.cancelCut();
-            that.sign();
-            that.sendBack();
-            return false;
-        };
+    var isIE = (document.all) ? true : false; // 是否ie
+    var isIE6 = isIE && ([/MSIE (\d)\.0/i.exec(navigator.userAgent)][0][1] == 6);
+    var $ = function (id) {
+//返回id对象
+        return "string" == typeof id ? document.getElementById(id) : id;
     };
-    Screen.prototype.createEle=function(father,type,id){
-        var ele=document.createElement(type);
-        ele.id=id;
-        father.appendChild(ele);
-        return ele;
-    };
-    Screen.prototype.cut=function(left,top,wh,ht){
-        var that=this;
-        var canvas=this.canvas;
-        canvas.width = wh;
-        canvas.height = ht;
-        this.context.drawImage(that.video, left*that.scaleX, top*that.scaleY, wh*that.scaleX, ht*that.scaleY,0, 0, wh, ht);
-        this.baseURL=that.canvas.toDataURL('png');
-    };
-    Screen.prototype.download=function(type){
-        //设置保存图片的类型
-        var imgdata =  this.baseURL;
-        //将mime-type改为image/octet-stream,强制让浏览器下载
-        var fixtype = function (type) {
-            type = type.toLocaleLowerCase().replace(/jpg/i, 'jpeg');
-            var r = type.match(/png|jpeg|bmp|gif/)[0];
-            return 'image/' + r;
-        };
-        imgdata = imgdata.replace(fixtype(type), 'image/octet-stream');
-        //将图片保存到本地
-        var saveFile = function (data, filename) {
-            var link = document.createElement('a');
-            link.href = data;
-            link.download = filename;
-            var event = document.createEvent('MouseEvents');
-            event.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
-            link.dispatchEvent(event);
-        };
-        var filename = new Date().toLocaleDateString() + '.' + type;
-        saveFile(imgdata, filename);
-    };
-    Screen.prototype.cancelFun=function(){
-        $(this.cutBox).remove();
-    };
-    Screen.prototype.cancelCut=function(){
-        var that=this;
-        this.cancel.onclick=function(){
-           that.cancelFun();
-        };
-    };
-    Screen.prototype.sign=function(){
-        var that=this;
-        this.rect.onclick=function(){
-            $(that.canvas).addClass('active');
-            that.rectSign()
-        };
-    };
-    Screen.prototype.rectSign=function(){
-        this.cutBox.onmousedown=null;
-        this.cutBox.onmousemove=null;
-        this.cutBox.onmouseup=null;
-        var ogc= this.context;
-        var that=this;
-        var set=$(this.sizeBox).offset();
-        this.canvas.onmousedown = function(ev){
-            var ev=ev || window.event;
-            ogc.moveTo(ev.clientX-set.left,ev.clientY-set.top);
-            document.onmousemove = function(ev){
-                var ev = ev || window.event;
-                ogc.lineTo(ev.clientX-set.left,ev.clientY-set.top);
-                ogc.stroke();
-            };
-            document.onmouseup = function(){
-                that.baseURL=that.canvas.toDataURL('png');
-                document.onmousemove = null;
-                document.onmouseup = null;
-            };
+    var _resize = new Resize($('dragDiv'), {Max: true,onResize:function(){
+        var p=GetPos($('dragDiv'));
+        var canvas=document.getElementById('canvas');
+        canvas.width= p.Width-4;
+        canvas.height= p.Height-4;
+        var con=canvas.getContext('2d');
+        var img=document.getElementById('pic');
+        var scaleX=1;
+        var scaleY=1;
+        console.log(scaleY);
+        con.drawImage(img, p.Left, p.Top, p.Width, p.Height,0,0,p.Width, p.Height);
+        var newPic=document.getElementById('newPic');
+        newPic.url=canvas.toDataURL('jpg');
+        function GetPos(obj) {
+            return {Top: obj.offsetTop, Left: obj.offsetLeft, Width: obj.offsetWidth, Height: obj.offsetHeight}
         }
-    };
-    Screen.prototype.savePic=function(){
-        var that=this;
-        var type = 'png';
-        this.save.onclick=function(){
-            that.download(type);
-            that.cancelFun();
-        }
-    };
-    Screen.prototype.sendBack=function(){
-        var that=this;
-        that.sure.onclick=function(){
-            if (that.sendPic !== null) {
-                that.sendPic.call(that,that.baseURL);
-                that.cancelFun();
-            }
-        }
-    };
-    $.fn.screen = function(options) {
-        var _ = this;
-        return _.each(function(index, element) {
-            element.onclick =function(){
-                this.screen=new Screen(options)
-            };
-        });
-    };
-    $(function(){
-        var _resize= new Resize($('#dragDiv')[0]);
-
-        var localVideo = document.getElementById('localVideo');
-        localVideo.addEventListener('loadedmetadata', function() {
-            var scaleY=this.videoHeight/this.offsetHeight;
-            var scaleX=this.videoWidth/this.offsetWidth;
-            $('#screenShot').screen({video:localVideo,scalex:scaleX,scaley:scaleY,sendPic:function(pic){
-                $('body').append('<img id="img" src="'+pic+'"/>');
-            }});
-        });
-    });
-
+    }});
+    _resize.Set('dRightDown', "right-down");
+    _resize.Set('dLeftDown', "left-down");
+    _resize.Set('dRightUp', "right-up");
+    _resize.Set('dLeftUp', "left-up");
+    _resize.Set('dRight', "right");
+    _resize.Set('dLeft', "left");
+    _resize.Set('dDown', "down");
+    _resize.Set('dUp', "up");
+    var _drag = new Drag($('dragDiv'), { Limit: true,onResize: Bind(this, this.SetPos) , Transparent: true });
 </script>
 </body>
 </html>
