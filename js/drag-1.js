@@ -107,7 +107,7 @@ Drag.prototype = {
 //拖动
     Move: function(oEvent) {
 //判断是否锁定
-        if(this.Lock){ this.Stop(); return; };
+        if(this.Lock){ this.Stop(); return; }
 //清除选择
         window.getSelection ? window.getSelection().removeAllRanges() : document.selection.empty();
 //设置移动参数
@@ -132,19 +132,23 @@ Drag.prototype = {
         if(!this.LockY){ this.Drag.style.top = iTop - this._marginTop + "px"; }
 //附加程序
         this.onMove();
-    },
-//停止拖动
-    Stop: function() {
-//移除事件
-        removeEventHandler(document, "mousemove", this._fM);
-        removeEventHandler(document, "mouseup", this._fS);
-        if(isIE){
-            removeEventHandler(this._Handle, "losecapture", this._fS);
-            this._Handle.releaseCapture();
-        }else{
-            removeEventHandler(window, "blur", this._fS);
-        };
-//附加程序
-        this.onStop();
     }
 };
+//停止拖动
+Drag.prototype.Stop=function() {
+
+//移除事件
+    removeEventHandler(document, "mousemove", this._fM);
+    removeEventHandler(document, "mouseup", this._fS);
+    if(isIE){
+        removeEventHandler(this._Handle, "losecapture", this._fS);
+        this._Handle.releaseCapture();
+    }else{
+        removeEventHandler(window, "blur", this._fS);
+    };
+//附加程序
+    this.onStop();
+};
+Drag.prototype.Locked=function(){
+    this.Lock=true;
+}

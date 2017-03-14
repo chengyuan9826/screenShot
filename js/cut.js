@@ -1,5 +1,5 @@
 function GetPos(obj) {
-    return {Top: obj.offsetTop, Left: obj.offsetLeft, Width: obj.offsetWidth, Height: obj.offsetHeight}
+    return {Top: obj.offsetTop, Left: obj.offsetLeft,Width: obj.offsetWidth, Height: obj.offsetHeight}
 }
 function Screen(obj){
     var that=this;
@@ -31,19 +31,18 @@ function Screen(obj){
     that.scaleX=obj.scalex||1;
     that.cutBox.style.width=that.video.offsetWidth+'px';
     that.cutBox.style.height=that.video.offsetHeight+'px';
+    that.drag=null;
     this.setSize();
 }
 Screen.prototype.setSize=function(){
     var that=this;
     var _resize = new Resize(that.sizeBox, {Max: true, mxContainer:"cutBox",onResize:function(){
         var p=GetPos(that.sizeBox);
-        that.canvas.width= p.Width-2;
-        that.canvas.height= p.Height-2;
-        that.context.drawImage(that.video, p.Left* that.scaleX, p.Top* that.scaleY, p.Width* that.scaleX, p.Height* that.scaleY,0,0,p.Width, p.Height);
-        that.baseURL=that.canvas.toDataURL('jpg');
-        if(p.Width>that.cutBox.offsetHeight-50){
+        that.cut( p.Left,p.Top,p.Width-2, p.Height-2);
+        that.position(box);
+     /*   if(p.Width>that.cutBox.offsetHeight-50){
             that.btnList.style.bottom=0;
-        }
+        }*/
     }});
     _resize.Set(that.dRightDown,"right-down");
     _resize.Set(that.dLeftDown, "left-down");
@@ -57,73 +56,15 @@ Screen.prototype.setSize=function(){
     that.cancelCut();
     that.sign();
     that.sendBack();
-    // var _drag = new Drag(that.sizeBox, { Limit: true,onResize: Bind(this, this.SetPos) , Transparent: true });
-    /*        var sx,sy,mx,my;
-     var sizeBox=$(that.sizeBox);
-     var off=false;
-     that.cutBox.onmousedown=function (event) {
-     off=true;
-     /!*           if(sx<0){sx=0;}
-     else if(sx>=pic.offsetWidth)
-     {sx=pic.offsetWidth;}
-     else{sx=event.clientX;}
-     if(sy<0){sy=0;}
-     else if(sy>=pic.offsetHeight)
-     {sy=pic.offsetHeight;}
-     else{
-     sy=event.clientY;}*!/
-     sx=event.clientX;
-     sy=event.clientY;
-     };
-     that.cutBox.onmousemove=function (event) {
-     var cx= 0,cy= 0,wh= 0,ht=0;
-     if(off){
-     mx=event.clientX;
-     my=event.clientY;
-     mx=mx>0?mx:0;
-     mx=mx>pic.width()?pic.width():mx;
-     my=my>0?my:0;
-     my=my>pic.width()?pic.width():my;
-     if(sx>mx&&sy>my){
-     sizeBox.css({right:(pic.width()-sx)+'px',bottom:(pic.height()-sy)+'px'});
-     cx=mx;cy=my;
-     }
-     else if(sx>mx&&sy<my){
-     sizeBox.css({right:(pic.width()-sx)+'px',top:sy+'px'});
-     cx=mx;cy=sy;
-     }
-     else if(sx<mx&&sy<my){
-     sizeBox.css({left:sx+'px',top:sy+'px'});
-     cx=sx;cy=sy;
-     }
-     else if(sx<mx&&sy>my){
-     sizeBox.css({left:sx+'px',bottom:(pic.height()-sy)+'px'});
-     cx=sx;cy=my;
-     }
-     wh=Math.abs(mx-sx);
-     ht=Math.abs(my-sy);
-     if(ht>pic.height()-50){
-     $(that.btnList).css('bottom',0);
-     }
-     sizeBox.width(wh);
-     sizeBox.height(ht);
-     that.cut(cx, cy, wh,ht);
-     }
-     };
-     that.cutBox.onmouseup=function () {
-     off=false;
-     that.savePic();
-     that.cancelCut();
-     that.sign();
-     that.sendBack();
-     return false;
-     };*/
-};
-Screen.prototype.createEle=function(father,type,id){
-    var ele=document.createElement(type);
-    ele.id=id;
-    father.appendChild(ele);
-    return ele;
+    var box=GetPos(that.cutBox);
+    that.drag = new Drag(that.sizeBox, { Limit: true, Transparent: true, mxRight: box.Width-2, mxBottom: box.Height-2,onMove:function (){
+        var p=GetPos(that.sizeBox);
+        that.cut( p.Left,p.Top,p.Width-2, p.Height-2);
+  /*      if(p.Width>that.cutBox.offsetHeight-50){
+            that.btnList.style.bottom=0;
+        }*/
+        that.position(box);
+    }});
 };
 Screen.prototype.cut=function(left,top,wh,ht){
     var that=this;
@@ -132,6 +73,34 @@ Screen.prototype.cut=function(left,top,wh,ht){
     canvas.height = ht;
     this.context.drawImage(that.video, left*that.scaleX, top*that.scaleY, wh*that.scaleX, ht*that.scaleY,0, 0, wh, ht);
     this.baseURL=that.canvas.toDataURL('png');
+};
+Screen.prototype.position=function(boxP){
+    var that=this;
+    var size=GetPos(that.sizeBox);
+    var btn=GetPos(that.btnList);
+    console.log('size:'+size.Left);
+    console.log('left:'+(boxP.Width-btn.Width));
+    if(size.Left>boxP.Width-btn.Width){
+        that.btnList.style.right=0;
+        that.btnList.style.left='auto';
+    }
+    else {
+        that.btnList.style.right='auto';
+        that.btnList.style.left=0;
+    }
+
+    if(size.Top>(boxP.Height-btn.Height-size.Height+2)){
+        that.btnList.style.bottom=0;
+    }
+    else{
+        that.btnList.style.bottom='-36px';
+    }
+};
+Screen.prototype.createEle=function(father,type,id){
+    var ele=document.createElement(type);
+    ele.id=id;
+    father.appendChild(ele);
+    return ele;
 };
 Screen.prototype.download=function(type){
     //设置保存图片的类型
@@ -175,7 +144,8 @@ Screen.prototype.cancelCut=function(){
 Screen.prototype.sign=function(){
     var that=this;
     this.rect.onclick=function(){
-        that.rectSign()
+      that.drag.Locked();
+      that.rectSign();
     };
 };
 Screen.prototype.rectSign=function(){
@@ -225,7 +195,8 @@ Screen.prototype.sendBack=function(){
         var _ = this;
         return _.each(function(index, element) {
             element.onclick =function(){
-                this.screen=new Screen(options)
+                this.screen=new Screen(options);
+                this.screen.savePic();
             };
         });
     };
